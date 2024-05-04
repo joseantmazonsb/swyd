@@ -23,7 +23,6 @@ export async function action({request}: LoaderFunctionArgs) {
       throw new UnauthenticatedException()
     }
     if (!await bcrypt.compare(providedCredentials.password, storedCredentials.password)) {
-      console.log('wtf')
       throw new UnauthenticatedException()
     }
     providedCredentials.id = storedCredentials.id
