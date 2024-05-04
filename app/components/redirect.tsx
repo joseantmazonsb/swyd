@@ -1,3 +1,4 @@
+import React from "react"
 import { useEffect } from "react"
 
 export function Redirect({to}: {to: string}) {

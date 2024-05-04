@@ -2,6 +2,7 @@ node_modules
 build
 .env.local
 *.json
-!package.json
+!package*.json
+!tsconfig*.json
 *.zip
 .DS_store
