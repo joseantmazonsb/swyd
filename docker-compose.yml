@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  swyd:
+    container_name: swyd
+    restart: unless-stopped
+    network_mode: host
+    build:
+      context: .
+    ports:
+      - 3000:3000
+    environment:
+      - SWYD_ROOT=/etc/swyd
+      - SWYD_SNAPSHOTS=/var/swyd/snapshots
+      - SWYD_PRIVATE_KEY=verysecret
+    volumes:
+      - /etc/swyd:/etc/swyd
+      - /etc/swyd/snapshots:/var/swyd/snapshots
