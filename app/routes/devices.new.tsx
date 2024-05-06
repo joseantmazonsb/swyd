@@ -1,12 +1,13 @@
 import { json, useNavigate } from "@remix-run/react";
 import Page from "~/components/page";
-import { ApiError, ApiOk, ApiValidationError, Device } from "~/models";
+import { ApiOk, ApiValidationError, Device } from "~/models";
 import { getDeviceById } from "~/services/devices";
-import { DeviceContext, useApiFetch } from "~/hooks";
+import { useApiFetch } from "~/hooks";
 import { toastError, toastSuccess } from "~/components/toast";
 import { getTasksByDevice } from "~/services/tasks";
 import { EditDevice } from "~/components/devices/editDevice";
 import { FormikHelpers } from "formik";
+import { DeviceContext } from "~/contexts";
 
 export function loader({params} : {params: {deviceId: string}}) {
   const device = getDeviceById(params.deviceId)

@@ -120,6 +120,10 @@ export const snapshotsSchema = object({
 
 export type Snapshot = InferType<typeof snapshotsSchema>
 
+export type Account = {
+  username: string
+}
+
 export const credentialsSchema = object({
   username: string().required().min(2),
   password: string().required().min(6),

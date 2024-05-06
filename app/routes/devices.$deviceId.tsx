@@ -8,10 +8,11 @@ import NotFound from "~/components/notFound";
 import Page from "~/components/page";
 import { ApiError, Device, DeviceStatus, Task } from "~/models";
 import { getDeviceById } from "~/services/devices";
-import { DeviceContext, useApiFetch, useDeviceContext, useJsonFetch } from "~/hooks";
+import { useApiFetch, useJsonFetch } from "~/hooks";
 import { toastError, toastSuccess } from "~/components/toast";
 import { getTasksByDevice } from "~/services/tasks";
 import { EditDevice } from "~/components/devices/editDevice";
+import { DeviceContext, useDeviceContext } from "~/contexts";
 
 export function loader({params} : {params: {deviceId: string}}) {
   const device = getDeviceById(params.deviceId)
@@ -19,7 +20,7 @@ export function loader({params} : {params: {deviceId: string}}) {
   return json({device, tasks})
 }
 
-export default function Device() {
+export default function DevicePage() {
   const {device, tasks} = useLoaderData<typeof loader>()
   
   if (!device) {

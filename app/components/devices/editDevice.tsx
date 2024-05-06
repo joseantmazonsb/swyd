@@ -6,7 +6,7 @@ import { Collapse, Collapsable } from "../collapse"
 import CustomInput from "../forms/input"
 import { SelectType } from "../forms/selectType"
 import FlexSpacer from "../spacer"
-import { useDeviceContext } from "~/hooks"
+import { useDeviceContext } from "~/contexts"
 
 export function EditDevice({
   submitText,

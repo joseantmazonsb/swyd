@@ -1,11 +1,10 @@
-import { Button, Input, Listbox, ListboxItem, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Popover, PopoverContent, PopoverTrigger, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, select, useDisclosure } from "@nextui-org/react";
+import { Button, Listbox, ListboxItem, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Popover, PopoverContent, PopoverTrigger, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
 import { format } from "date-fns";
 import { Form, Formik, FormikHelpers } from "formik";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { HiDotsVertical, HiDownload, HiUpload } from "react-icons/hi";
 import { HiTrash, HiPlus, HiArrowUturnLeft } from "react-icons/hi2";
 import CustomPopover from "~/components/customPopover";
-import FileInput from "~/components/fileInput";
 import CustomInput from "~/components/forms/input";
 import NoContentImage from "~/components/noContentImage";
 import Page from "~/components/page";
@@ -56,12 +55,6 @@ export default function Snapshots() {
       toastError((err as Error).message)
     }
   }
-
-  useEffect(() => {
-    return () => {
-      setSelectedElements([])
-    }
-  }, [isSelecting])
 
   return (
     <Page title="Snapshots">
@@ -337,7 +330,7 @@ export default function Snapshots() {
               <Button
               variant="light"
                 onClick={() => {
-                  setSelectedElements([])
+                  // setSelectedElements([])
                   setSelecting(false)
                 }}
               >Cancel</Button>

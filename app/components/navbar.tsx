@@ -1,15 +1,25 @@
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenu, NavbarMenuItem, NavbarMenuToggle, Popover, PopoverTrigger, PopoverContent, Listbox, ListboxItem, Button, ThemeColors} from "@nextui-org/react";
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenu, NavbarMenuItem, NavbarMenuToggle, Popover, PopoverTrigger, PopoverContent, Listbox, ListboxItem, Button, ThemeColors, user, useUser} from "@nextui-org/react";
 import { useLocation } from "@remix-run/react";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { HiLogout } from "react-icons/hi";
 import { HiUser, HiUserCircle } from "react-icons/hi2";
+import { UserContext } from "~/contexts";
 import { useJsonFetch } from "~/hooks";
 
 export default function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const {data: account} = useJsonFetch<{username: string}>({
+
+  const {data} = useJsonFetch<{username: string}>({
     input: '/api/auth/account'
   }, [])
+  const {account, setAccount} = useContext(UserContext)
+
+  useEffect(() => {
+    if (data) {
+      setAccount(data)
+    }
+  }, [setAccount, data])
+
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen}>
       <NavbarMenuToggle

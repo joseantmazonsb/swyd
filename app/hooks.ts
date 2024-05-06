@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { Device, Task } from "./models"
+import { Account, Device, Task } from "./models"
 
 type FetchArgs = {
   input: string | URL | Request,
@@ -75,17 +75,4 @@ export function useJsonFetch<T>({
     return data as T
   }
   return useFetch<T>({input, init, getData}, dependencies)
-}
-
-type DeviceContextType = {
-  device: Device
-  tasks: Task[],
-  // status: 'ok' | 'fetching' | 'error'
-}
-
-export const DeviceContext = createContext<DeviceContextType | undefined >(undefined)
-
-export function useDeviceContext() {
-  const ctx = useContext(DeviceContext)
-  return ctx as DeviceContextType
 }
