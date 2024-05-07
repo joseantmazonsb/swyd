@@ -1,35 +1,26 @@
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenu, NavbarMenuItem, NavbarMenuToggle, Popover, PopoverTrigger, PopoverContent, Listbox, ListboxItem, Button, ThemeColors, user, useUser, Chip, Tooltip} from "@nextui-org/react";
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenu, NavbarMenuItem, NavbarMenuToggle, Popover, PopoverTrigger, PopoverContent, Listbox, ListboxItem, Chip, Tooltip} from "@nextui-org/react";
 import { useLocation } from "@remix-run/react";
 import { useContext, useEffect, useState } from "react";
 import { HiLogout } from "react-icons/hi";
 import { HiUser, HiUserCircle } from "react-icons/hi2";
 import { UserContext } from "~/contexts";
 import { useJsonFetch } from "~/hooks";
+import { Update } from "~/models";
 import { packageInfo } from "~/package";
 
 export default function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isUpdateAvailable, setIsUpdateAvailable] = useState(false)
 
-  useEffect(() => {
-    async function checkUpdates() {
-      try {
-        const res = await fetch(`https://api.github.com/repos/${packageInfo.repository.directory}/releases/latest`);
-        if (!res.ok) {
-          console.error(`Failed to check updates: ${res.status}`)
-          return
-        }
-        const data = await res.json() as {tag_name: string}
-        const latestVersion = data.tag_name.replace('v', '')
-        if (latestVersion > packageInfo.version) {
-          setIsUpdateAvailable(true)
-        }
-      } catch (error) {
-        console.error(`Failed to check updates: ${error}`)
-      }
-    }
-    checkUpdates()
+  const {data: update, status: updateStatus} = useJsonFetch<Update | false>({
+    input: '/api/updates'
   }, [])
+
+  useEffect(() => {
+    if (updateStatus === 'ok' && update) {
+      setIsUpdateAvailable(true)
+    }
+  }, [update, updateStatus])
 
 
   const {data} = useJsonFetch<{username: string}>({

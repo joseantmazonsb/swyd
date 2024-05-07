@@ -143,3 +143,8 @@ export const changePasswordSchema = object({
 })
 
 export type ChangePasswordType = InferType<typeof changePasswordSchema>
+
+export type Update = {
+  lastCheck: Date
+  version: string
+}

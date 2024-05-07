@@ -15,4 +15,5 @@ export const paths = {
   credentials: `${root}/credentials.json`,
   snapshots,
   snapshotsRegistry: `${snapshots}/snapshots.json`,
+  update: `${root}/update.json`
 }
