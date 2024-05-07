@@ -1,5 +1,15 @@
 {
-  "name": "",
+  "name": "swyd",
+  "displayName": "swyd",
+  "author": "Jose Antonio Mazon San Bartolome",
+  "description": "A simple web UI to manage your LAN devices",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joseantmazonsb/swyd",
+    "directory": "joseantmazonsb/swyd"
+  },
+  "homepage": "https://github.com/joseantmazonsb/swyd",
+  "version": "0.0.1",
   "private": true,
   "sideEffects": false,
   "type": "module",
