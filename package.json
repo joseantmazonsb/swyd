@@ -9,7 +9,7 @@
     "directory": "joseantmazonsb/swyd"
   },
   "homepage": "https://github.com/joseantmazonsb/swyd",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "sideEffects": false,
   "type": "module",
