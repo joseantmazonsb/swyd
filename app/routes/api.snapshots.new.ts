@@ -5,6 +5,9 @@ import { getSnapshots, updateSnapshots } from "~/services/snapshots";
 import { paths } from "~/constants";
 import AdmZip from 'adm-zip'
 import { handleAuth } from "~/middlewares/auth";
+import { getSettings } from "~/services/settings";
+import { getDevices } from "~/services/devices";
+import { getTasks } from "~/services/tasks";
 
 /**
  * Create backup file using snapshot info
@@ -14,6 +17,11 @@ async function createSnapshot(info: Snapshot) {
   const path =`${paths.snapshots}/${info.name}.zip`
   console.log(`Creating snapshot in ${path}`)
   const zip = new AdmZip()
+  // Ensure all files exist
+  getSettings()
+  getDevices()
+  getTasks()
+  
   zip.addLocalFile(paths.devices)
   zip.addLocalFile(paths.settings)
   zip.addLocalFile(paths.tasks)

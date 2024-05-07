@@ -13,7 +13,7 @@ export function getTasks() : Task[] {
     console.log(`Tasks file not found in path ${paths.tasks}. Creating default...`)
     const tasks: Task[] = []
     updateTasks(tasks)
-    console.log(`Settings file created!`)
+    console.log(`Tasks file created!`)
     return tasks
   }
   try {
@@ -27,5 +27,5 @@ export function getTasks() : Task[] {
 }
 
 export function updateTasks(tasks: Task[]) {
-  writeFileSync(paths.settings, JSON.stringify(tasks, undefined, 4))
+  writeFileSync(paths.tasks, JSON.stringify(tasks, undefined, 4))
 }

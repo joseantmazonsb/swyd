@@ -34,7 +34,7 @@ export function DeviceView({
     }
     setFetching(true)
     getData()
-  }, [])
+  }, [checkStatus])
 
   return (
     <Card className="flex min-w-96" isPressable={isPressable} onPress={onClick}>
