@@ -21,7 +21,8 @@ COPY --from=builder /app/package.json ./
 RUN npm i @remix-run/serve
 RUN apt update && apt install wakeonlan -y
 # Expose the port your Remix application runs on
-EXPOSE 3000
+ENV PORT 23254
+EXPOSE 23254
 
 # Start the Remix production server when the container starts
 CMD ["npx", "remix-serve", "./build/server/index.js"]
