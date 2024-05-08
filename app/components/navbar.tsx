@@ -44,7 +44,7 @@ export default function Index() {
         <div className="flex gap-1 items-baseline">
           <Link href="/" className="font-bold text-inherit">{packageInfo.displayName}</Link>
           <Tooltip content={packageInfo.commit}>
-            <Link href={`${packageInfo.repository.url}/releases/${packageInfo.version}`} className="text-gray-400 text-xs">
+            <Link href={`${packageInfo.repository.url}/releases/tag/v${packageInfo.version}`} className="text-gray-400 text-xs">
               {packageInfo.version}</Link>
           </Tooltip>
         </div>
