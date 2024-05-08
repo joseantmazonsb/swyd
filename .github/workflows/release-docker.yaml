@@ -12,6 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Get latest commit hash
+        id: commit_hash
+        run: echo "::set-output name=hash::$(git rev-parse HEAD)"
+      
+      - name: Update code with commit hash
+        run: sed -i "s/commit-hash/${{ steps.commit_hash.outputs.hash }}/" ./app/package.ts
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
