@@ -19,7 +19,7 @@ WORKDIR /app
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/package.json ./
 RUN npm i @remix-run/serve
-RUN apt update && apt install wakeonlan -y
+RUN apt update && apt install wakeonlan iputils-ping -y
 # Expose the port your Remix application runs on
 ENV PORT 23254
 EXPOSE 23254
