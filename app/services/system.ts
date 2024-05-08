@@ -22,7 +22,7 @@ export function poweroff(user: string, address: string, strictHostKeyChecking: b
 
 export function isAwakeAsync(address: string, attempts: number) {
   return new Promise((resolve) => {
-    exec(`ping -c ${attempts} -t 500 ${address}`, (err) => {
+    exec(`ping -c ${attempts} ${address}`, (err) => {
       resolve(err ? false : true)
     })
   })
