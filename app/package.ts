@@ -4,5 +4,6 @@ export const packageInfo = {
   version,
   displayName,
   repository,
-  homepage
+  homepage,
+  commit: 'commit-hash'
 }

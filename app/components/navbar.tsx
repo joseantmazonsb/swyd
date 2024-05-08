@@ -43,8 +43,10 @@ export default function Index() {
       <NavbarBrand className="flex gap-2 items-baseline">
         <div className="flex gap-1 items-baseline">
           <Link href="/" className="font-bold text-inherit">{packageInfo.displayName}</Link>
-          <Link href={`${packageInfo.repository.url}/releases/${packageInfo.version}`} className="text-gray-400 text-xs">
-            {packageInfo.version}</Link>
+          <Tooltip content={packageInfo.commit}>
+            <Link href={`${packageInfo.repository.url}/releases/${packageInfo.version}`} className="text-gray-400 text-xs">
+              {packageInfo.version}</Link>
+          </Tooltip>
         </div>
         {isUpdateAvailable && 
           <Tooltip content="A newer version is available!">
