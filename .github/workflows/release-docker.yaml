@@ -14,7 +14,7 @@ jobs:
 
       - name: Get latest commit hash
         id: commit_hash
-        run: echo "::set-output name=hash::$(git rev-parse HEAD)"
+        run: echo "::set-output name=hash::$(git rev-parse --short HEAD)"
       
       - name: Update code with commit hash
         run: sed -i "s/commit-hash/${{ steps.commit_hash.outputs.hash }}/" ./app/package.ts
