@@ -1,8 +1,6 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { paths } from "~/constants";
 import { handleAuth } from "~/middlewares/auth";
 import { packageInfo } from "~/package";
-import fs from 'fs'
 import { getUpdates, setUpdates } from "~/services/updates";
 import { createApiError } from "~/models";
 import { add } from "date-fns";
