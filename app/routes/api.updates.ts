@@ -29,12 +29,15 @@ export async function loader({request}: LoaderFunctionArgs) {
       }
       const data = await res.json() as {tag_name: string}
       const latestVersion = data.tag_name.replace('v', '')
-      if (latestVersion > packageInfo.version) {
-        const update = { version: latestVersion, lastCheck: new Date(Date.now()) }
-        setUpdates(update)
-        console.log(`Cache updated with value ${JSON.stringify(update)}`)
+      const update = { version: latestVersion, lastCheck: new Date(Date.now()) }
+      setUpdates(update)
+      console.log(`Cache updated with value ${JSON.stringify(update)}`)
+      if (update.version > packageInfo.version) {
+        console.log(`Update to version ${update.version} available`)
         return json({data: update})
       }
+      console.log('No updates found')
+      return json({data: false})
     }
 
     if (update) {
@@ -53,6 +56,6 @@ export async function loader({request}: LoaderFunctionArgs) {
     return await updateValues()
     
   } catch (error) {
-      return json(createApiError(500, `Failed to check updates: ${error}`), 500)
+    return json(createApiError(500, `Failed to check updates: ${error}`), 500)
   }
 }
