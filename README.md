@@ -42,8 +42,24 @@ services:
       # To be able to send commands through ssh
       - /path/to/.ssh:/root/.ssh
       # Optional, to persist data if the container is stopped
-      - /srv/swyd:/etc/swyd
-      - /var/swyd/snapshots:/var/swyd/snapshots
+      - /path/to/swyd:/etc/swyd
+      - /path/to/var/swyd/snapshots:/var/swyd/snapshots
+```
+
+Alternatively, if you'd rather use `docker run`, you could do:
+
+```bash
+docker run -d \
+  --name swyd \
+  --restart unless-stopped \
+  --network host \
+  -e SWYD_ROOT=/etc/swyd \
+  -e SWYD_SNAPSHOTS=/var/swyd/snapshots \
+  -e SWYD_PRIVATE_KEY=verysecret \
+  -v /path/to/.ssh:/root/.ssh \
+  -v /path/to/etc/swyd:/etc/swyd \
+  -v /path/to/var/swyd/snapshots:/var/swyd/snapshots \
+  ghcr.io/joseantmazonsb/swyd:latest
 ```
 
 ## Screenshots
