@@ -15,7 +15,7 @@ Tired of manually booting up and powering off your LAN devices using the termina
 
 You will still need to:
 - Enable wake-on-lan capabilities in all devices you would like to remotely turn on
-- Install the SSH credentials of the server hosting **swyd** in all devices you would like to remotely turn off (`ssh-copy-id`).
+- Manually install the SSH credentials of the server hosting **swyd** in all devices you would like to remotely turn off (`ssh-copy-id`).
 
 ## Setup
 
@@ -39,6 +39,8 @@ services:
       - SWYD_SNAPSHOTS=/var/swyd/snapshots # Backups
       - SWYD_PRIVATE_KEY=verysecret # Authentication
     volumes:
+      # To be able to send commands through ssh
+      - /path/to/.ssh:/root/.ssh
       # Optional, to persist data if the container is stopped
       - /srv/swyd:/etc/swyd
       - /var/swyd/snapshots:/var/swyd/snapshots
