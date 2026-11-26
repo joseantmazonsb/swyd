@@ -5,12 +5,15 @@ import { deviceSchema } from "~/models";
 import { getDevices, updateDevices } from "~/services/devices";
 import { toDictionary } from "~/services/validation";
 import { remove } from "~/utils";
+import { handleAuth } from '~/middlewares/auth';
 
 export const action = async ({
   params,
   request,
 }: LoaderFunctionArgs) => {
   try {
+    const unauthorized = await handleAuth(request)
+    if (unauthorized) return unauthorized
     const data = await request.json()
     console.log(data)
     const toValidate = {

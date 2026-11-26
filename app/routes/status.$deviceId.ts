@@ -2,8 +2,11 @@ import { isAwakeAsync } from "~/services/system";
 import { json } from "@remix-run/node";
 import { getDeviceById } from "~/services/devices"
 import { getSettings } from "~/services/settings";
+import { handleAuth } from '~/middlewares/auth';
 
-export async function loader({params} : {params: {deviceId: string}}) {
+export async function loader({params, request} : {params: {deviceId: string}, request: Request}) {
+  const unauthorized = await handleAuth(request)
+  if (unauthorized) return unauthorized
   const device = getDeviceById(params.deviceId)
   const settings = getSettings()
   if (!device) {

@@ -2,8 +2,11 @@ import { wake } from "~/services/system"
 import { json } from "@remix-run/node"
 import { getDeviceById } from "~/services/devices"
 import { createApiError } from "~/models"
+import { handleAuth } from '~/middlewares/auth'
 
-export function loader({params} : {params: {deviceId: string}}) {
+export async function action({params, request} : {params: {deviceId: string}, request: Request}) {
+  const unauthorized = await handleAuth(request)
+  if (unauthorized) return unauthorized
   const device = getDeviceById(params.deviceId)
   if (!device) {
     const msg = `Device ${params.deviceId} not found`

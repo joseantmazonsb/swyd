@@ -1,8 +1,8 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
+import { ActionFunctionArgs, json } from "@remix-run/node"
 import { compare } from "bcrypt"
 import { ValidationError } from "yup"
-import { handleAuth } from "~/middlewares/auth"
-import { ChangePasswordType, changePasswordSchema, createApiError, createApiInternalError, createApiValidationError, credentialsSchema } from "~/models"
+import { getIdentity, handleAuth } from "~/middlewares/auth"
+import { ChangePasswordType, changePasswordSchema, createApiError, createApiInternalError, createApiValidationError } from "~/models"
 import { getCredentials, updateCredentials } from "~/services/auth"
 
 export async function action({request}: ActionFunctionArgs) {
@@ -10,6 +10,7 @@ export async function action({request}: ActionFunctionArgs) {
     // Remix does not support middlewares yet
     const unauthorized = await handleAuth(request)
     if (unauthorized) return unauthorized
+    if ((await getIdentity(request))?.provider === 'oidc') return json(createApiError(403, 'OIDC accounts are managed by the identity provider'), 403)
     
     const body = await request.json() as ChangePasswordType
     const storedCredentials = getCredentials()

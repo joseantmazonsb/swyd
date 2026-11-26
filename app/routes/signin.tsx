@@ -14,7 +14,6 @@ import { ApiError, ApiOk, Credentials, credentialsSchema } from "~/models";
 export default function SignIn() {
   const navigate = useNavigate()
   const onSubmit = async (values: Credentials) => {
-    console.log(values)
     const res = await fetch('/api/auth/signin', {
       method: 'POST',
       body: JSON.stringify(values)
@@ -30,12 +29,16 @@ export default function SignIn() {
   }
   const [fetching, setFetching] = useState(true)
   const [setup, setSetup] = useState(false)
+  const [oidc, setOidc] = useState(false)
+  const [local, setLocal] = useState(false)
 
   useEffect(() => {
     const getData = async () => {
       const res = await fetch('/api/setup')
-      const {data: setup} = await res.json() as ApiOk<boolean>
+      const {data: setup, oidc, local} = await res.json() as ApiOk<boolean> & {oidc: boolean, local: boolean}
       setSetup(setup)
+      setOidc(oidc)
+      setLocal(local)
       setFetching(false)
     }
     getData()
@@ -72,13 +75,17 @@ export default function SignIn() {
                       Sign In
                     </CardHeader>
                     <CardBody className="flex flex-col gap-4">
+                      {oidc && <Button as="a" href="/auth/oidc" color="secondary" onClick={() => localStorage.removeItem('authorization')}>Sign in with OpenID Connect</Button>}
+                      {local && <>
                       <CustomInput label="Username" id="username" isRequired/>
                       <CustomInput type="password" label="Password" id="password" isRequired/>
                       <CustomCheckbox id="rememberMe" label="Remember me for 7 days"/>
+                      </>}
                     </CardBody>
+                    {local &&
                     <CardFooter className="flex">
                       <Button isLoading={formik.isSubmitting} isDisabled={!formik.dirty || !formik.isValid} className="flex flex-grow" color="primary" type="submit">Sign in</Button>
-                    </CardFooter>
+                    </CardFooter>}
                   </Card>
                 </div>
               </Form>

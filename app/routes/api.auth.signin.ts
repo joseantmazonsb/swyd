@@ -17,8 +17,6 @@ export async function action({request}: LoaderFunctionArgs) {
     if (!storedCredentials) {
       return json(createApiError(400, 'No users registered!'), 400)
     }
-    console.log(providedCredentials)
-    console.log(storedCredentials)
     if (providedCredentials.username !== storedCredentials.username) {
       throw new UnauthenticatedException()
     }

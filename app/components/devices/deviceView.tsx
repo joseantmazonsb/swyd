@@ -1,5 +1,4 @@
-import { Link, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Card, CardHeader, Chip, Divider, CardBody, CardFooter, Tooltip, UseDisclosureProps } from "@nextui-org/react"
-import { useFetcher } from "@remix-run/react"
+import { Link, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Card, CardHeader, Chip, Divider, CardBody, CardFooter, UseDisclosureProps } from "@nextui-org/react"
 import { Form, Formik, FormikHelpers } from "formik"
 import { useState, useEffect, createContext } from "react"
 import { HiArrowPath, HiPower } from "react-icons/hi2"
@@ -21,7 +20,6 @@ export function DeviceView({
   const [status, setStatus] = useState<DeviceStatus>('offline')
   const [checkStatus, setCheckStatus] = useState(0)
   const [isMainButtonWaiting, setMainButtonWaiting] = useState(false)
-  const actionFetcher = useFetcher()
 
   const apiFetch = useApiFetch()
   useEffect(() => {
@@ -59,19 +57,21 @@ export function DeviceView({
               <div className="grow"/>
             </>
           }
-          <actionFetcher.Form method="get" action={status == 'online' ? `/poweroff/${device.id}` : `/wake/${device.id}`}>
-            <Button isLoading={fetching || isMainButtonWaiting} type="submit" 
+            <Button isLoading={fetching || isMainButtonWaiting}
                 color={fetching ? undefined : status === 'online' ? 'danger' : 'primary'} 
                 variant={fetching ? undefined : status === 'online' ? 'light' : 'flat'}
                 startContent={fetching || isMainButtonWaiting? '' : <HiPower/>}
-                onClick={() => {
-                  setTimeout(() => {
-                    setMainButtonWaiting(true)
-                    setTimeout(() => {
-                      setCheckStatus(checkStatus+1)
-                      setMainButtonWaiting(false)
-                    }, 15000)
-                  }, 300)
+                onClick={async (event) => {
+                  event.stopPropagation()
+                  setMainButtonWaiting(true)
+                  try {
+                    const res = await apiFetch(status === 'online' ? `/poweroff/${device.id}` : `/wake/${device.id}`, { method: 'POST' })
+                    if (!res.ok || !(await res.json())) throw new Error('The power command failed')
+                    setTimeout(() => { setCheckStatus(value => value + 1); setMainButtonWaiting(false) }, 15000)
+                  } catch (error) {
+                    toastError((error as Error).message)
+                    setMainButtonWaiting(false)
+                  }
                 }}
               >
                 {fetching 
@@ -79,7 +79,6 @@ export function DeviceView({
                 : <>{status == 'online' ? 'Turn off' : 'Turn on'}</>
                 }
             </Button>
-          </actionFetcher.Form>
       </CardFooter>
     </Card>
   )

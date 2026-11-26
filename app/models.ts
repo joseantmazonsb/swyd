@@ -122,6 +122,7 @@ export type Snapshot = InferType<typeof snapshotsSchema>
 
 export type Account = {
   username: string
+  provider?: 'local' | 'oidc'
 }
 
 export const credentialsSchema = object({

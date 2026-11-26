@@ -2,9 +2,11 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { ValidationError } from "yup";
 import { Credentials, createApiError, createApiInternalError, createApiValidationError, credentialsSchema } from "~/models";
 import { getCredentials, signIn, updateCredentials } from "~/services/auth";
+import { oidcEnabled } from '~/services/oidc.server';
 
 export async function action({request}: LoaderFunctionArgs) {
   try {
+    if (oidcEnabled) return json(createApiError(403, 'Local registration is disabled when OIDC is configured'), 403)
     const storedCredentials = getCredentials()
     if (storedCredentials) {
       return json(createApiError(409, 'Already registered!'), 409)

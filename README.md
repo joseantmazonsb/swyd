@@ -46,6 +46,27 @@ services:
       - /path/to/var/swyd/snapshots:/var/swyd/snapshots
 ```
 
+### OpenID Connect (optional)
+
+To enable OIDC alongside the existing local account, configure these variables:
+
+```yaml
+      - SWYD_OIDC_ISSUER=https://auth.example.com/application/o/swyd/
+      - SWYD_OIDC_CLIENT_ID=your-client-id
+      - SWYD_OIDC_CLIENT_SECRET=your-client-secret
+      - SWYD_OIDC_REDIRECT_URI=https://swyd.example.com/auth/oidc/callback
+```
+
+Register the exact redirect URI with your identity provider, allow the `openid`,
+`profile` and `email` scopes, and use a confidential authorization-code client.
+Restrict the application to trusted users at the identity provider: every
+authorized user can manage devices, settings and snapshots. Configure all four
+variables or none. Use HTTPS in production and keep the client secret and a
+strong, persistent `SWYD_PRIVATE_KEY` private. When OIDC is enabled, new local
+account registration is disabled; an existing local account remains available.
+Signing out ends the SWYD session, but not the identity provider's SSO session.
+Run `npm run build && npm test` to exercise the OIDC and local-login flows.
+
 Alternatively, if you'd rather use `docker run`, you could do:
 
 ```bash

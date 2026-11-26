@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
-import { handleAuth } from "~/middlewares/auth"
+import { getIdentity, handleAuth } from "~/middlewares/auth"
 import { createApiError, createApiInternalError } from "~/models"
 import { getCredentials, updateCredentials } from "~/services/auth"
 
@@ -9,9 +9,11 @@ export async function loader({request}: LoaderFunctionArgs) {
     const unauthorized = await handleAuth(request)
     if (unauthorized) return unauthorized
     
+    const identity = await getIdentity(request)
     const credentials = getCredentials()
     return json({data: {
-      username: credentials?.username
+      username: identity?.provider === 'oidc' ? identity.username : credentials?.username,
+      provider: identity?.provider || 'local'
     }})
   }
   catch (e) {
@@ -24,6 +26,7 @@ export async function action({request}: ActionFunctionArgs) {
     // Remix does not support middlewares yet
     const unauthorized = await handleAuth(request)
     if (unauthorized) return unauthorized
+    if ((await getIdentity(request))?.provider === 'oidc') return json(createApiError(403, 'OIDC accounts are managed by the identity provider'), 403)
     
     const account = await request.json() as {username: string}
     const credentials = getCredentials()

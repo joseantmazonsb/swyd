@@ -5,7 +5,7 @@ export default function SignOut() {
   const [done, setDone] = useState(false)
   useEffect(() => {
     localStorage.removeItem('authorization')
-    setDone(true)
+    fetch('/api/auth/logout', { method: 'POST' }).finally(() => setDone(true))
   }, [])
   return (
     <>

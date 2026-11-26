@@ -5,7 +5,6 @@ import { Spinner } from "@nextui-org/react";
 import FlexSpacer from "./spacer";
 import { Redirect } from "./redirect";
 import { ApiOk } from "~/models";
-import { isExpired } from "react-jwt";
 import { UserContextProvider } from "~/contexts";
 
 export default function Layout({
@@ -49,29 +48,22 @@ function Authorized({
   
   useEffect(() => {
     const getData = async () => {
-      const res = await fetch('/api/setup')
-      const {data} = await res.json() as ApiOk<boolean>
-      setSetup(data)
-      setFetching(false)
-    }
-    getData()
-    const token = localStorage.getItem('authorization')
-    if (token) {
       try {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const expired = isExpired(token)
-        if (expired) {
-          localStorage.removeItem('authorization')
-        }
-        else {
-          setAuth(true)
-        }
+        const token = localStorage.getItem('authorization')
+        const headers = token ? { 'X-Authorization': token } : undefined
+        const [setupRes, sessionRes] = await Promise.all([fetch('/api/setup'), fetch('/api/auth/session', { headers })])
+        const {data} = await setupRes.json() as ApiOk<boolean>
+        const session = await sessionRes.json()
+        setSetup(data)
+        setAuth(!!session.data)
+        if (token && !session.data) localStorage.removeItem('authorization')
       }
       catch (err) {
         console.log(err)
-        localStorage.removeItem('authorization')
       }
+      finally { setFetching(false) }
     }
+    getData()
   }, [])
 
   return (

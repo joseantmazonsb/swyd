@@ -60,6 +60,7 @@ export default function AccountPage() {
         <div className="flex flex-row">
           <div className="hidden sm:flex flex-grow"/>
           <div className="flex flex-col flex-grow max-w-[600px] sm:min-w-[600px] gap-4">
+            {account?.provider === 'oidc' ? <p>Your account is managed by your identity provider.</p> : <>
             <Formik initialValues={{
               username: account?.username ?? ''
             }} onSubmit={onSubmit} enableReinitialize>
@@ -122,6 +123,7 @@ export default function AccountPage() {
               </Form>
               )}
             </Formik>
+            </>}
           </div>
           <div className="hidden sm:flex flex-grow"/>
         </div>

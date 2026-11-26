@@ -3,8 +3,11 @@ import { json } from "@remix-run/node"
 import { getSettings } from "~/services/settings"
 import { getDeviceById } from "~/services/devices"
 import { createApiError } from "~/models"
+import { handleAuth } from '~/middlewares/auth'
 
-export async function loader({params}: {params: {deviceId: string}}) {
+export async function action({params, request}: {params: {deviceId: string}, request: Request}) {
+  const unauthorized = await handleAuth(request)
+  if (unauthorized) return unauthorized
   const { ssh } = getSettings()
   const device = getDeviceById(params.deviceId)
   if (!device) {

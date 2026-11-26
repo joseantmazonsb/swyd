@@ -5,7 +5,7 @@ WORKDIR /app
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 # Install dependencies
-RUN npm install
+RUN npm ci
 # Copy the rest of the application code to the working directory
 COPY . .
 # Build the Remix application for production
@@ -15,10 +15,11 @@ RUN npm run build
 FROM node:20
 # Set working directory inside the container
 WORKDIR /app
-# Copy built artifacts from the builder stage
+# Install the same locked runtime dependencies used for the build.
+COPY package*.json ./
+RUN npm ci --omit=dev
+# Copy built artifacts after installing dependencies to preserve the cache.
 COPY --from=builder /app/build ./build
-COPY --from=builder /app/package.json ./
-RUN npm i @remix-run/serve
 RUN apt update && apt install wakeonlan iputils-ping -y
 # Expose the port your Remix application runs on
 ENV PORT 23254

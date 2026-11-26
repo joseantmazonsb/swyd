@@ -17,14 +17,15 @@
     "build": "remix vite:build",
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "test": "node --test tests/*.test.mjs",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc"
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.10",
-    "@remix-run/node": "^2.8.1",
-    "@remix-run/react": "^2.8.1",
-    "@remix-run/serve": "^2.8.1",
+    "@remix-run/node": "2.17.5",
+    "@remix-run/react": "2.17.5",
+    "@remix-run/serve": "2.17.5",
     "adm-zip": "^0.5.12",
     "bcrypt": "^5.1.1",
     "date-fns": "^3.6.0",
@@ -32,6 +33,7 @@
     "framer-motion": "^11.0.22",
     "isbot": "^4.1.0",
     "jsonwebtoken": "^9.0.2",
+    "openid-client": "^5.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
@@ -40,7 +42,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^2.8.1",
+    "@remix-run/dev": "2.17.5",
     "@types/adm-zip": "^0.5.5",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.6",

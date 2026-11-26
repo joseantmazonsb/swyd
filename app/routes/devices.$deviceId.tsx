@@ -1,5 +1,5 @@
 import { Button, Card, CardBody, CardHeader, Chip, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
-import { json, useLoaderData, useNavigate } from "@remix-run/react";
+import { useNavigate, useParams } from "@remix-run/react";
 import { useState } from "react";
 import { HiArrowPath, HiChevronDown, HiChevronUp, HiPlus, HiPower, HiTrash } from "react-icons/hi2";
 import { Collapsable, Collapse } from "~/components/collapse";
@@ -7,21 +7,17 @@ import FlexSpacer from "~/components/spacer";
 import NotFound from "~/components/notFound";
 import Page from "~/components/page";
 import { ApiError, Device, DeviceStatus, Task } from "~/models";
-import { getDeviceById } from "~/services/devices";
 import { useApiFetch, useJsonFetch } from "~/hooks";
 import { toastError, toastSuccess } from "~/components/toast";
-import { getTasksByDevice } from "~/services/tasks";
 import { EditDevice } from "~/components/devices/editDevice";
 import { DeviceContext, useDeviceContext } from "~/contexts";
 
-export function loader({params} : {params: {deviceId: string}}) {
-  const device = getDeviceById(params.deviceId)
-  const tasks = getTasksByDevice(params.deviceId)
-  return json({device, tasks})
-}
-
 export default function DevicePage() {
-  const {device, tasks} = useLoaderData<typeof loader>()
+  const { deviceId } = useParams()
+  const { data, status } = useJsonFetch<{device?: Device, tasks: Task[]}>({ input: `/api/device/${deviceId}` }, [deviceId])
+  if (status === 'fetching') return null
+  const device = data?.device
+  const tasks = data?.tasks || []
   
   if (!device) {
     return <NotFound/>
@@ -49,7 +45,7 @@ function StatusBar() {
 
   const onSubmit = async (endpoint: 'wake' | 'poweroff') => {
     try {
-      const res = await apiFetch(`/${endpoint}/${device.id}/`)
+      const res = await apiFetch(`/${endpoint}/${device.id}/`, { method: 'POST' })
       if (!res.ok) {
         const { message } = await res.json() as ApiError
         return toastError(message)
